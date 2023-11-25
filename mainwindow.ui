@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTextEdit" name="textEdit"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuArchivo">
+    <property name="title">
+     <string>Archivo</string>
+    </property>
+    <addaction name="actionGuardar"/>
+    <addaction name="actionEliminar"/>
+    <addaction name="actionAbrir"/>
+    <addaction name="actionImprimir"/>
+   </widget>
+   <widget class="QMenu" name="menuEdici_n">
+    <property name="title">
+     <string>Edición</string>
+    </property>
+    <addaction name="actionEstilo"/>
+    <addaction name="separator"/>
+    <addaction name="actionAlinear_Izquierda"/>
+    <addaction name="actionAlinear_Derecha"/>
+    <addaction name="actionCentrado"/>
+   </widget>
+   <addaction name="menuArchivo"/>
+   <addaction name="menuEdici_n"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionGuardar">
+   <property name="icon">
+    <iconset resource="Imagenes.qrc">
+     <normaloff>:/1/save-to-disk-user-interface-icon-vector-removebg-preview.png</normaloff>:/1/save-to-disk-user-interface-icon-vector-removebg-preview.png</iconset>
+   </property>
+   <property name="text">
+    <string>Guardar</string>
+   </property>
+  </action>
+  <action name="actionEliminar">
+   <property name="icon">
+    <iconset resource="Imagenes.qrc">
+     <normaloff>:/1/png-clipart-button-delete-key-icon-warning-icons-text-sign-removebg-preview.png</normaloff>:/1/png-clipart-button-delete-key-icon-warning-icons-text-sign-removebg-preview.png</iconset>
+   </property>
+   <property name="text">
+    <string>Eliminar</string>
+   </property>
+  </action>
+  <action name="actionAbrir">
+   <property name="icon">
+    <iconset resource="Imagenes.qrc">
+     <normaloff>:/1/3391036.png</normaloff>:/1/3391036.png</iconset>
+   </property>
+   <property name="text">
+    <string>Abrir</string>
+   </property>
+  </action>
+  <action name="actionImprimir">
+   <property name="icon">
+    <iconset resource="Imagenes.qrc">
+     <normaloff>:/1/3756888-removebg-preview.png</normaloff>:/1/3756888-removebg-preview.png</iconset>
+   </property>
+   <property name="text">
+    <string>Imprimir</string>
+   </property>
+  </action>
+  <action name="actionEstilo">
+   <property name="icon">
+    <iconset resource="Imagenes.qrc">
+     <normaloff>:/1/44553.png</normaloff>:/1/44553.png</iconset>
+   </property>
+   <property name="text">
+    <string>Tamaño y Fuente</string>
+   </property>
+  </action>
+  <action name="actionTama_po">
+   <property name="icon">
+    <iconset resource="Imagenes.qrc">
+     <normaloff>:/1/44553.png</normaloff>:/1/44553.png</iconset>
+   </property>
+   <property name="text">
+    <string>Tamaño</string>
+   </property>
+  </action>
+  <action name="actionSubrayado">
+   <property name="icon">
+    <iconset resource="Imagenes.qrc">
+     <normaloff>:/1/png-transparent-computer-icons-underline-button-encapsulated-postscript-underline-angle-text-triangle-thumbnail.png</normaloff>:/1/png-transparent-computer-icons-underline-button-encapsulated-postscript-underline-angle-text-triangle-thumbnail.png</iconset>
+   </property>
+   <property name="text">
+    <string>Subrayado</string>
+   </property>
+  </action>
+  <action name="actionNegrita">
+   <property name="icon">
+    <iconset resource="Imagenes.qrc">
+     <normaloff>:/1/png-clipart-font-computer-icons-typography-letter-bold-letters-angle-text.png</normaloff>:/1/png-clipart-font-computer-icons-typography-letter-bold-letters-angle-text.png</iconset>
+   </property>
+   <property name="text">
+    <string>Negrita</string>
+   </property>
+  </action>
+  <action name="actionAlinear_Izquierda">
+   <property name="icon">
+    <iconset resource="Imagenes.qrc">
+     <normaloff>:/1/1994233 (1).png</normaloff>:/1/1994233 (1).png</iconset>
+   </property>
+   <property name="text">
+    <string>Alinear Izquierda</string>
+   </property>
+  </action>
+  <action name="actionAlinear_Derecha">
+   <property name="icon">
+    <iconset resource="Imagenes.qrc">
+     <normaloff>:/1/descarga-removebg-preview.png</normaloff>:/1/descarga-removebg-preview.png</iconset>
+   </property>
+   <property name="text">
+    <string>Alinear Derecha</string>
+   </property>
+  </action>
+  <action name="actionCentrado">
+   <property name="icon">
+    <iconset resource="Imagenes.qrc">
+     <normaloff>:/1/text-align-center_icon-icons.com_48217.png</normaloff>:/1/text-align-center_icon-icons.com_48217.png</iconset>
+   </property>
+   <property name="text">
+    <string>Centrado</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="Imagenes.qrc"/>
+ </resources>
+ <connections/>
+</ui>
