@@ -19,14 +19,16 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 }
 
+// Cierra la MainWindow
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-
+// Funcion de boton que guarda el archivo
 void MainWindow::on_actionGuardar_triggered()
 {
+    // Cuadro de dialogo para definir el nombre y tipo de archivo a guardar
     QString nombreArch = QFileDialog::getSaveFileName(this, "Guardar", "", "Documentos RTF (*.rtf);;Documentos PDF (*.pdf)");
 
     if (!nombreArch.isEmpty()) {
@@ -57,89 +59,151 @@ void MainWindow::on_actionGuardar_triggered()
 }
 
 
-
+// Funcion de boton que elimina todo el texto del bloc 
 void MainWindow::on_actionEliminar_triggered()
 {
     ui->textEdit->clear();
 }
 
 
-
+// Funcion de boton que abre un archivo en el bloc
 void MainWindow::on_actionAbrir_triggered()
 {
-    QFile arch;
-    QTextStream io;
-    QString nombreArch;
-    nombreArch=QFileDialog::getOpenFileName(this,"Abrir");
-    arch.setFileName(nombreArch);
-    arch.open(QIODevice::ReadOnly | QIODevice::Text);
-    io.setDevice(&arch);
-    ui->textEdit->setPlainText(io.readAll());
-    arch.flush();
-    arch.close();
+    // Declaración de objetos QFile y QTextStream
+QFile arch;
+QTextStream io;
+
+// Declaración de una cadena de caracteres para almacenar el nombre del archivo
+QString nombreArch;
+
+// Cuadro de diálogo para que el usuario seleccione un archivo y guarda su nombre en 'nombreArch'
+nombreArch = QFileDialog::getOpenFileName(this, "Abrir");
+
+// Establece el nombre del archivo para el objeto QFile
+arch.setFileName(nombreArch);
+
+// Abre el archivo en modo de solo lectura y texto
+arch.open(QIODevice::ReadOnly | QIODevice::Text);
+
+// Asocia el objeto QTextStream con el objeto QFile para facilitar la lectura
+io.setDevice(&arch);
+
+// Lee todo el contenido del archivo y lo establece en un QTextEdit llamado "textEdit"
+ui->textEdit->setPlainText(io.readAll());
+
+// Limpia el búfer del archivo y cierra el archivo
+arch.flush();
+arch.close();
+
 
 }
 
 
 void MainWindow::on_actionImprimir_triggered()
 {
-    QPrinter printer;
-    QPrintDialog printDialog(&printer, this);
-    if (printDialog.exec() == QDialog::Accepted) {
-        QTextDocument document;
-        document.setPlainText(ui->textEdit->toPlainText());
-        document.print(&printer);
-    }
+    // Declaración de un objeto QPrinter
+QPrinter printer;
+
+// Crea un cuadro de diálogo de impresión, asociándolo con el objeto QPrinter y el widget actual (this)
+QPrintDialog printDialog(&printer, this);
+
+// Si el usuario hace clic en "Aceptar" en el cuadro de diálogo de impresión
+if (printDialog.exec() == QDialog::Accepted) {
+    // Crea un objeto QTextDocument
+    QTextDocument document;
+
+    // Establece el texto del QTextDocument con el contenido del QTextEdit llamado "textEdit"
+    document.setPlainText(ui->textEdit->toPlainText());
+
+    // Imprime el documento en la impresora configurada a través del cuadro de diálogo de impresión
+    document.print(&printer);
+}
+
 }
 
 
 void MainWindow::on_actionEstilo_triggered()
 {
-    bool ok;
- QFont font = QFontDialog::getFont(&ok, ui->textEdit->textCursor().charFormat().font(), this);
+    // Declaración de una variable booleana "ok"
+bool ok;
 
+// Abre un cuadro de diálogo para seleccionar la fuente y guarda la fuente seleccionada en la variable "font"
+QFont font = QFontDialog::getFont(&ok, ui->textEdit->textCursor().charFormat().font(), this);
 
-    if (ok) {
-        QTextCursor cursor = ui->textEdit->textCursor();
+// Verifica si el usuario ha seleccionado una fuente en el cuadro de diálogo
+if (ok) {
+    // Obtiene el cursor de texto actual del widget QTextEdit
+    QTextCursor cursor = ui->textEdit->textCursor();
 
-        if (cursor.hasSelection()) {
-            QTextCharFormat format;
-            format.setFont(font);
-            cursor.setCharFormat(format);
-            QTextCharFormat defaultFormat;
-            defaultFormat.setFont(QFont());
-            QTextCursor defaultCursor = ui->textEdit->textCursor();
-            defaultCursor.setCharFormat(defaultFormat);
-            ui->textEdit->setCurrentCharFormat(format);
-        } else {
+    // Verifica si hay texto seleccionado
+    if (cursor.hasSelection()) {
+        // Crea un formato de caracteres y establece la fuente seleccionada
+        QTextCharFormat format;
+        format.setFont(font);
 
-            QTextCharFormat format;
-            format.setFont(font);
-            QTextCharFormat defaultFormat;
-            defaultFormat.setFont(QFont());
+        // Aplica el formato al texto seleccionado
+        cursor.setCharFormat(format);
 
-            QTextCursor defaultCursor = ui->textEdit->textCursor();
-            defaultCursor.setCharFormat(defaultFormat);
-            ui->textEdit->setCurrentCharFormat(format);
-        }
+        // Crea un formato de caracteres predeterminado y establece una fuente nula
+        QTextCharFormat defaultFormat;
+        defaultFormat.setFont(QFont());
+
+        // Obtiene un cursor predeterminado y establece el formato predeterminado
+        QTextCursor defaultCursor = ui->textEdit->textCursor();
+        defaultCursor.setCharFormat(defaultFormat);
+
+        // Establece el formato actual del widget al formato seleccionado
+        ui->textEdit->setCurrentCharFormat(format);
+    } else {
+        // Si no hay texto seleccionado, simplemente establece la fuente en el formato actual
+        QTextCharFormat format;
+        format.setFont(font);
+
+        // Crea un formato de caracteres predeterminado y establece una fuente nula
+        QTextCharFormat defaultFormat;
+        defaultFormat.setFont(QFont());
+
+        // Obtiene un cursor predeterminado y establece el formato predeterminado
+        QTextCursor defaultCursor = ui->textEdit->textCursor();
+        defaultCursor.setCharFormat(defaultFormat);
+
+        // Establece el formato actual del widget al formato seleccionado
+        ui->textEdit->setCurrentCharFormat(format);
     }
+}
+
 }
 
 void MainWindow::on_actionAlinear_Izquierda_triggered()
 {
-    QTextCursor cursor = ui->textEdit->textCursor();
-        QTextBlockFormat format;
-        format.setAlignment(Qt::AlignLeft);
-        cursor.mergeBlockFormat(format);
-    ui->textEdit->setTextCursor(cursor);
+    // Obtiene el cursor de texto actual del widget QTextEdit
+QTextCursor cursor = ui->textEdit->textCursor();
+
+// Crea un formato de bloque de texto y establece la alineación a la izquierda
+QTextBlockFormat format;
+format.setAlignment(Qt::AlignLeft);
+
+// Combina el formato del bloque en el cursor de texto actual
+cursor.mergeBlockFormat(format);
+
+// Establece el cursor de texto del widget QTextEdit con el nuevo formato de bloque
+ui->textEdit->setTextCursor(cursor);
+
 }
 
 void MainWindow::on_actionAlinear_Derecha_triggered()
 {
+    // Obtiene el cursor de texto actual del widget QTextEdit 
     QTextCursor cursor = ui->textEdit->textCursor();
+
+    // Crea un formato de bloque de texto y establece la alineación a la derecha
         QTextBlockFormat format;
         format.setAlignment(Qt::AlignRight);
+
+    // Combina el formato del bloque en el cursor de texto actual
         cursor.mergeBlockFormat(format);
+
+    // Establece el cursor de texto del widget QTextEdit con el nuevo formato de bloque
     ui->textEdit->setTextCursor(cursor);
 }
 
@@ -147,11 +211,17 @@ void MainWindow::on_actionAlinear_Derecha_triggered()
 
 void MainWindow::on_actionCentrado_triggered()
 {
+    // Obtiene el cursor de texto actual del widget QTextEdit 
     QTextCursor cursor = ui->textEdit->textCursor();
+
+    // Crea un formato de bloque de texto y establece la alineación al centro
         QTextBlockFormat format;
         format.setAlignment(Qt::AlignCenter);
-        cursor.mergeBlockFormat(format);
 
+    // Combina el formato del bloque en el cursor de texto actual
+        cursor.mergeBlockFormat(format
+            
+    // Establece el cursor de texto del widget QTextEdit con el nuevo formato de bloque
     ui->textEdit->setTextCursor(cursor);
 }
 
