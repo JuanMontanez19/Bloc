@@ -12,10 +12,13 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+// Constructor de la clase Mainwindow 
     MainWindow(QWidget *parent = nullptr);
+// Destructor de la clase Mainwindow
     ~MainWindow();
 
 private slots:
+// Slots que manejan cada una de las funciones indicadas en sus nombres 
     void on_actionGuardar_triggered();
 
     void on_actionEliminar_triggered();
@@ -25,12 +28,6 @@ private slots:
     void on_actionImprimir_triggered();
 
     void on_actionEstilo_triggered();
-
-    void on_actionTama_po_triggered();
-
-    void on_actionSubrayado_triggered();
-
-    void on_actionNegrita_triggered();
 
     void on_actionAlinear_Izquierda_triggered();
 
