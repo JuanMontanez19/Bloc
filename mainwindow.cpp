@@ -10,7 +10,8 @@
 #include <QMessageBox>
 #include <QTextFrame>
 #include <QPainter>
-
+#include <QTextDocumentWriter>
+#include <QFileInfo>
 // Constructor de la clase MainWindow
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -28,35 +29,57 @@ MainWindow::~MainWindow()
 // Funcion de boton que guarda el archivo
 void MainWindow::on_actionGuardar_triggered()
 {
-    // Cuadro de dialogo para definir el nombre y tipo de archivo a guardar
-    QString nombreArch = QFileDialog::getSaveFileName(this, "Guardar", "", "Documentos RTF (*.rtf);;Documentos PDF (*.pdf)");
+    // Cuadro de diálogo para definir el nombre y tipo de archivo a guardar
+    QString nombreArch = QFileDialog::getSaveFileName(this, "Guardar", "", "Documentos RTF (*.rtf);;Documentos HTML (*.html);;Documentos PDF (*.pdf)");
 
     if (!nombreArch.isEmpty()) {
         QFile arch(nombreArch);
 
+        qDebug() << "Antes de abrir el archivo para escritura";
+
         if (arch.open(QIODevice::WriteOnly)) {
+            qDebug() << "Archivo abierto correctamente para escritura";
+
             QTextDocument *textDocument = ui->textEdit->document();
 
-            if (nombreArch.endsWith(".rtf", Qt::CaseInsensitive)) {
-                // Guardar el contenido en formato RTF
-                arch.write(textDocument->toHtml().toUtf8());
-            } else if (nombreArch.endsWith(".pdf", Qt::CaseInsensitive)) {
-                // Guardar el contenido en formato PDF
-                QPrinter printer;
-                printer.setOutputFormat(QPrinter::PdfFormat);
-                printer.setOutputFileName(nombreArch);
+            if (textDocument) {
+                if (nombreArch.toLower().endsWith(".html")) {
+                    // Guardar el contenido en formato HTML
+                    QTextDocumentWriter writer(nombreArch + ".html");  // Agregar la extensión .html
+                    writer.setFormat("HTML");
+                    writer.write(textDocument);
+                    qDebug() << "Guardado como HTML";
+                }
+                else if (nombreArch.toLower().endsWith(".pdf")) {
+                    // Guardar el contenido en formato PDF
+                    QPrinter printer;
+                    printer.setOutputFormat(QPrinter::PdfFormat);
+                    printer.setOutputFileName(nombreArch);
 
-                QPainter painter(&printer);
-                textDocument->drawContents(&painter);
+                    QPainter painter(&printer);
+                    textDocument->drawContents(&painter);
+                    qDebug() << "Guardado como PDF";
+                } else {
+                    qDebug() << "Formato no soportado";
+                }
+            } else {
+                qDebug() << "El documento de texto no es válido";
             }
 
             arch.close();
         } else {
-            // Manejar el error al abrir el archivo
+            qDebug() << "Error al abrir el archivo para escritura";
             QMessageBox::warning(this, "Error", "No se pudo abrir el archivo para escribir.");
         }
+    } else {
+        qDebug() << "Operación cancelada";
     }
 }
+
+
+
+
+
 
 
 // Funcion de boton que elimina todo el texto del bloc 
@@ -70,33 +93,51 @@ void MainWindow::on_actionEliminar_triggered()
 void MainWindow::on_actionAbrir_triggered()
 {
     // Declaración de objetos QFile y QTextStream
-QFile arch;
-QTextStream io;
+    QFile arch;
+    QTextStream io;
 
-// Declaración de una cadena de caracteres para almacenar el nombre del archivo
-QString nombreArch;
+    // Declaración de una cadena de caracteres para almacenar el nombre del archivo
+    QString nombreArch;
 
-// Cuadro de diálogo para que el usuario seleccione un archivo y guarda su nombre en 'nombreArch'
-nombreArch = QFileDialog::getOpenFileName(this, "Abrir");
+    // Cuadro de diálogo para que el usuario seleccione un archivo y guarda su nombre en 'nombreArch'
+    nombreArch = QFileDialog::getOpenFileName(this, "Abrir");
 
-// Establece el nombre del archivo para el objeto QFile
-arch.setFileName(nombreArch);
+    // Obtener la extensión del archivo
+    QFileInfo fileInfo(nombreArch);
+    QString extension = fileInfo.suffix().toLower();
 
-// Abre el archivo en modo de solo lectura y texto
-arch.open(QIODevice::ReadOnly | QIODevice::Text);
+    // Manejar archivos RTF
+    if (extension == "rtf") {
+        // Abre el archivo en modo de solo lectura y texto
+        arch.setFileName(nombreArch);
+        arch.open(QIODevice::ReadOnly | QIODevice::Text);
 
-// Asocia el objeto QTextStream con el objeto QFile para facilitar la lectura
-io.setDevice(&arch);
+        // Asocia el objeto QTextStream con el objeto QFile para facilitar la lectura
+        io.setDevice(&arch);
 
-// Lee todo el contenido del archivo y lo establece en un QTextEdit llamado "textEdit"
-ui->textEdit->setPlainText(io.readAll());
+        // Utiliza QTextDocument para cargar el contenido RTF
+        QTextDocument textDocument;
+        textDocument.setPlainText(io.readAll());
+        ui->textEdit->setPlainText(textDocument.toPlainText());
+    }
 
-// Limpia el búfer del archivo y cierra el archivo
-arch.flush();
-arch.close();
+
+    // Manejar otros tipos de archivos
+    else {
+        // Abre el archivo en modo de solo lectura y texto
+        arch.setFileName(nombreArch);
+        arch.open(QIODevice::ReadOnly | QIODevice::Text);
+
+        // Asocia el objeto QTextStream con el objeto QFile para facilitar la lectura
+        io.setDevice(&arch);
+
+        // Lee todo el contenido del archivo y lo establece en un QTextEdit llamado "textEdit"
+        ui->textEdit->setPlainText(io.readAll());
 
 
+    }
 }
+
 
 
 void MainWindow::on_actionImprimir_triggered()
