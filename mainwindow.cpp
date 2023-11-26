@@ -45,8 +45,7 @@ void MainWindow::on_actionGuardar_triggered()
             if (textDocument) {
                 if (nombreArch.toLower().endsWith(".html")) {
                     // Guardar el contenido en formato HTML
-                    QTextDocumentWriter writer(nombreArch + ".html");  // Agregar la extensión .html
-                    writer.setFormat("HTML");
+                    QTextDocumentWriter writer(nombreArch);  // Agregar la extensión .html
                     writer.write(textDocument);
                     qDebug() << "Guardado como HTML";
                 }
@@ -82,7 +81,7 @@ void MainWindow::on_actionGuardar_triggered()
 
 
 
-// Funcion de boton que elimina todo el texto del bloc 
+// Funcion de boton que elimina todo el texto del bloc
 void MainWindow::on_actionEliminar_triggered()
 {
     ui->textEdit->clear();
@@ -92,50 +91,38 @@ void MainWindow::on_actionEliminar_triggered()
 // Funcion de boton que abre un archivo en el bloc
 void MainWindow::on_actionAbrir_triggered()
 {
-    // Declaración de objetos QFile y QTextStream
-    QFile arch;
-    QTextStream io;
+    // Cuadro de diálogo para seleccionar el archivo a abrir
+    QString nombreArch = QFileDialog::getOpenFileName(this, "Abrir archivo", "", "Documentos RTF (*.rtf);;Documentos HTML (*.html);;TXT (*.txt)");
 
-    // Declaración de una cadena de caracteres para almacenar el nombre del archivo
-    QString nombreArch;
+    if (!nombreArch.isEmpty()) {
+        QFile arch(nombreArch);
 
-    // Cuadro de diálogo para que el usuario seleccione un archivo y guarda su nombre en 'nombreArch'
-    nombreArch = QFileDialog::getOpenFileName(this, "Abrir");
+        qDebug() << "Antes de abrir el archivo para lectura";
 
-    // Obtener la extensión del archivo
-    QFileInfo fileInfo(nombreArch);
-    QString extension = fileInfo.suffix().toLower();
+        if (arch.open(QIODevice::ReadOnly)) {
+            qDebug() << "Archivo abierto correctamente para lectura";
 
-    // Manejar archivos RTF
-    if (extension == "rtf") {
-        // Abre el archivo en modo de solo lectura y texto
-        arch.setFileName(nombreArch);
-        arch.open(QIODevice::ReadOnly | QIODevice::Text);
+            QTextStream in(&arch);
+            QString contenido = in.readAll();
+            arch.close();
 
-        // Asocia el objeto QTextStream con el objeto QFile para facilitar la lectura
-        io.setDevice(&arch);
+            if (nombreArch.toLower().endsWith(".html")) {
+                // Establecer el contenido en el QTextEdit para archivos HTML
+                ui->textEdit->setHtml(contenido);
+            }
+             if (nombreArch.toLower().endsWith(".rtf")) {
+                // Establecer el contenido en el QTextEdit para archivos RTF
+                ui->textEdit->setPlainText(contenido);
 
-        // Utiliza QTextDocument para cargar el contenido RTF
-        QTextDocument textDocument;
-        textDocument.setPlainText(io.readAll());
-        ui->textEdit->setPlainText(textDocument.toPlainText());
-    }
+             }
+             if (nombreArch.toLower().endsWith(".txt")) {
+                // Establecer el contenido en el QTextEdit para archivos TXT
+                ui->textEdit->setPlainText(contenido);
 
-
-    // Manejar otros tipos de archivos
-    else {
-        // Abre el archivo en modo de solo lectura y texto
-        arch.setFileName(nombreArch);
-        arch.open(QIODevice::ReadOnly | QIODevice::Text);
-
-        // Asocia el objeto QTextStream con el objeto QFile para facilitar la lectura
-        io.setDevice(&arch);
-
-        // Lee todo el contenido del archivo y lo establece en un QTextEdit llamado "textEdit"
-        ui->textEdit->setPlainText(io.readAll());
-
+             }
 
     }
+}
 }
 
 
@@ -234,7 +221,7 @@ ui->textEdit->setTextCursor(cursor);
 
 void MainWindow::on_actionAlinear_Derecha_triggered()
 {
-    // Obtiene el cursor de texto actual del widget QTextEdit 
+    // Obtiene el cursor de texto actual del widget QTextEdit
     QTextCursor cursor = ui->textEdit->textCursor();
 
     // Crea un formato de bloque de texto y establece la alineación a la derecha
@@ -252,7 +239,7 @@ void MainWindow::on_actionAlinear_Derecha_triggered()
 
 void MainWindow::on_actionCentrado_triggered()
 {
-    // Obtiene el cursor de texto actual del widget QTextEdit 
+    // Obtiene el cursor de texto actual del widget QTextEdit
     QTextCursor cursor = ui->textEdit->textCursor();
 
     // Crea un formato de bloque de texto y establece la alineación al centro
@@ -261,7 +248,7 @@ void MainWindow::on_actionCentrado_triggered()
 
     // Combina el formato del bloque en el cursor de texto actual
         cursor.mergeBlockFormat(format);
-            
+
     // Establece el cursor de texto del widget QTextEdit con el nuevo formato de bloque
     ui->textEdit->setTextCursor(cursor);
 }
