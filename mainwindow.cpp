@@ -219,7 +219,7 @@ void MainWindow::on_actionCentrado_triggered()
         format.setAlignment(Qt::AlignCenter);
 
     // Combina el formato del bloque en el cursor de texto actual
-        cursor.mergeBlockFormat(format
+        cursor.mergeBlockFormat(format);
             
     // Establece el cursor de texto del widget QTextEdit con el nuevo formato de bloque
     ui->textEdit->setTextCursor(cursor);
