@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 }
 
-// Cierra la MainWindow
+// Destructor de la clase MainWindow
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -34,12 +34,7 @@ void MainWindow::on_actionGuardar_triggered()
 
     if (!nombreArch.isEmpty()) {
         QFile arch(nombreArch);
-
-        qDebug() << "Antes de abrir el archivo para escritura";
-
         if (arch.open(QIODevice::WriteOnly)) {
-            qDebug() << "Archivo abierto correctamente para escritura";
-
             QTextDocument *textDocument = ui->textEdit->document();
 
             if (textDocument) {
@@ -47,9 +42,8 @@ void MainWindow::on_actionGuardar_triggered()
                     // Guardar el contenido en formato HTML
                     QTextDocumentWriter writer(nombreArch);  // Agregar la extensión .html
                     writer.write(textDocument);
-                    qDebug() << "Guardado como HTML";
                 }
-                else if (nombreArch.toLower().endsWith(".pdf")) {
+                 if (nombreArch.toLower().endsWith(".pdf")) {
                     // Guardar el contenido en formato PDF
                     QPrinter printer;
                     printer.setOutputFormat(QPrinter::PdfFormat);
@@ -57,21 +51,11 @@ void MainWindow::on_actionGuardar_triggered()
 
                     QPainter painter(&printer);
                     textDocument->drawContents(&painter);
-                    qDebug() << "Guardado como PDF";
-                } else {
-                    qDebug() << "Formato no soportado";
-                }
-            } else {
-                qDebug() << "El documento de texto no es válido";
+                } 
             }
 
             arch.close();
-        } else {
-            qDebug() << "Error al abrir el archivo para escritura";
-            QMessageBox::warning(this, "Error", "No se pudo abrir el archivo para escribir.");
-        }
-    } else {
-        qDebug() << "Operación cancelada";
+        } 
     }
 }
 
@@ -93,28 +77,26 @@ void MainWindow::on_actionAbrir_triggered()
 {
     // Cuadro de diálogo para seleccionar el archivo a abrir
     QString nombreArch = QFileDialog::getOpenFileName(this, "Abrir archivo", "", "Documentos RTF (*.rtf);;Documentos HTML (*.html);;TXT (*.txt)");
-
+    // Verifica si el nombre del archivo esta vacio
     if (!nombreArch.isEmpty()) {
         QFile arch(nombreArch);
-
-        qDebug() << "Antes de abrir el archivo para lectura";
-
+    // Verifica si el archivo puede abrir en modo lectura
         if (arch.open(QIODevice::ReadOnly)) {
-            qDebug() << "Archivo abierto correctamente para lectura";
-
             QTextStream in(&arch);
             QString contenido = in.readAll();
             arch.close();
-
+    // Verifica si el archivo está en formato HTML
             if (nombreArch.toLower().endsWith(".html")) {
                 // Establecer el contenido en el QTextEdit para archivos HTML
                 ui->textEdit->setHtml(contenido);
             }
+    // Verifica si el archivo está en formato RTF
              if (nombreArch.toLower().endsWith(".rtf")) {
                 // Establecer el contenido en el QTextEdit para archivos RTF
                 ui->textEdit->setPlainText(contenido);
 
              }
+            // Verifica si el archivo está en formato TXT
              if (nombreArch.toLower().endsWith(".txt")) {
                 // Establecer el contenido en el QTextEdit para archivos TXT
                 ui->textEdit->setPlainText(contenido);
