@@ -30,7 +30,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionGuardar_triggered()
 {
     // Cuadro de diálogo para definir el nombre y tipo de archivo a guardar
-    QString nombreArch = QFileDialog::getSaveFileName(this, "Guardar", "", "Documentos RTF (*.rtf);;Documentos HTML (*.html);;Documentos PDF (*.pdf)");
+    QString nombreArch = QFileDialog::getSaveFileName(this, "Guardar", "","Documentos HTML (*.html);;Documentos PDF (*.pdf)");
 
     if (!nombreArch.isEmpty()) {
         QFile arch(nombreArch);
