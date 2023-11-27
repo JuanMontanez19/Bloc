@@ -40,7 +40,7 @@ void MainWindow::on_actionGuardar_triggered()
             if (textDocument) {
                 if (nombreArch.toLower().endsWith(".html")) {
                     // Guardar el contenido en formato HTML
-                    QTextDocumentWriter writer(nombreArch);  // Agregar la extensión .html
+                    QTextDocumentWriter writer(nombreArch);  
                     writer.write(textDocument);
                 }
                  if (nombreArch.toLower().endsWith(".pdf")) {
