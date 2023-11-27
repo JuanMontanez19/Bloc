@@ -33,3 +33,10 @@ Funcionalidad: Modifica la alineación del texto en el cursor o la selección ac
 Centrado (Centrado_triggered):
 
 Funcionalidad: Modifica la alineación del texto en el cursor o la selección actual al centro.
+
+
+Juan David Montañez Grajales 
+Universidad Tecnológica de Pereira 
+Programa de Ingenieria de sistemas y computación 
+Facultad de ingenierias 
+juan.montanez@utp.edu.co
