@@ -1,4 +1,7 @@
 # Bloc-de-notas-
+Este programa es una aplicación de procesamiento de texto desarrollada en C++ utilizando la biblioteca Qt. La interfaz gráfica se crea con Qt Widgets, y la lógica del programa se implementa en la clase MainWindow.
+
+
 Guardar (Guardar_triggered):
 
 Funcionalidad: Abre un cuadro de diálogo para que el usuario seleccione la ubicación y el formato del archivo (HTML o PDF) y guarda el contenido en el archivo seleccionado.
